@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -13,7 +12,6 @@ namespace WindowsDesktop
 	{
         private readonly ComObjects _comObjects;
         private readonly IDisposable _listener;
-		private readonly ConcurrentDictionary<Guid, VirtualDesktop> _wrappers = new ConcurrentDictionary<Guid, VirtualDesktop>();
 
         private bool IsCurrentVirtualDesktop(IntPtr handle)
         {
@@ -38,15 +36,7 @@ namespace WindowsDesktop
             }
         }
 
-        private VirtualDesktop wrap(IVirtualDesktop x)
-        {
-            return _wrappers.GetOrAdd(x.GetID(), _ =>
-            {
-                var wrapper = new VirtualDesktop(this, x);
-                _comObjects.Register(x);
-                return wrapper;
-            });
-        }
+        private VirtualDesktop wrap(IVirtualDesktop x) => new VirtualDesktop(this, x);
 
         /// <summary>
         /// Gets the virtual desktop that is currently displayed.

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using WindowsDesktop.Interop;
 
 namespace WindowsDesktop
 {
-	partial class VirtualDesktops
+    partial class VirtualDesktops
 	{
 		public bool IsPinnedWindow(IntPtr hWnd)
 		{

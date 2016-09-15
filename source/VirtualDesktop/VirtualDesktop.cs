@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
 using WindowsDesktop.Interop;
 
 namespace WindowsDesktop
 {
-	/// <summary>
-	/// Encapsulates a virtual desktop on Windows 10.
-	/// </summary>
-	[DebuggerDisplay("{Id}")]
+    /// <summary>
+    /// Encapsulates a virtual desktop on Windows 10.
+    /// </summary>
+    [DebuggerDisplay("{Id}")]
 	public partial class VirtualDesktop
 	{
 		/// <summary>
@@ -44,11 +41,11 @@ namespace WindowsDesktop
         /// <summary>
         /// Returns a virtual desktop on the left.
         /// </summary>
-        public VirtualDesktop GetLeft() => _desktops.GetLeft(this);
+        public VirtualDesktop Left => _desktops.GetLeft(this);
 
 		/// <summary>
 		/// Returns a virtual desktop on the right.
 		/// </summary>
-		public VirtualDesktop GetRight() => _desktops.GetRight(this);
+		public VirtualDesktop Right => _desktops.GetRight(this);
     }
 }

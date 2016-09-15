@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using WindowsDesktop.Internal;
 
 namespace WindowsDesktop.Interop
 {
-	public class ComObjects : IDisposable
+    public class ComObjects : IDisposable
 	{
 		private ExplorerRestartListenerWindow _listenerWindow;
-		private readonly ConcurrentDictionary<Guid, IVirtualDesktop> _virtualDesktops = new ConcurrentDictionary<Guid, IVirtualDesktop>();
 
 		internal IVirtualDesktopManager VirtualDesktopManager { get; private set; }
 		internal VirtualDesktopManagerInternal VirtualDesktopManagerInternal { get; private set; }
@@ -31,24 +27,12 @@ namespace WindowsDesktop.Interop
             VirtualDesktopNotificationService = GetVirtualDesktopNotificationService();
             VirtualDesktopPinnedApps = GetVirtualDesktopPinnedApps();
             ApplicationViewCollection = GetApplicationViewCollection();
-
-            _virtualDesktops.Clear();
         }
 
         public void Dispose()
         {
             _listenerWindow?.Close();
         }
-
-        internal void Register(IVirtualDesktop vd)
-		{
-			_virtualDesktops.AddOrUpdate(vd.GetID(), vd, (guid, desktop) => vd);
-		}
-
-		internal IVirtualDesktop GetVirtualDesktop(Guid id)
-		{
-			return _virtualDesktops.GetOrAdd(id, x => VirtualDesktopManagerInternal.FindDesktop(ref x));
-		}
 
 		private class ExplorerRestartListenerWindow : TransparentWindow
 		{

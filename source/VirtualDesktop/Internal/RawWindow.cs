@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Interop;
 using WindowsDesktop.Interop;
 
 namespace WindowsDesktop.Internal
 {
-	internal abstract class RawWindow
+    internal abstract class RawWindow
 	{
 		public string Name { get; set; }
 

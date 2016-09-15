@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Interop;
+﻿using System.Windows.Interop;
 
 namespace WindowsDesktop.Internal
 {
-	internal class TransparentWindow : RawWindow
+    internal class TransparentWindow : RawWindow
 	{
 		public override void Show()
 		{

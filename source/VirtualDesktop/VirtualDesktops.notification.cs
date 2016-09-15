@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using WindowsDesktop.Internal;
 using WindowsDesktop.Interop;
 
 namespace WindowsDesktop
 {
-	partial class VirtualDesktops
+    partial class VirtualDesktops
 	{
 		private uint? dwCookie;
 		private VirtualDesktopNotificationListener listener;
@@ -34,7 +31,7 @@ namespace WindowsDesktop
 		public event EventHandler<VirtualDesktopChangedEventArgs> CurrentChanged;
 
 
-		internal IDisposable RegisterListener()
+		private IDisposable RegisterListener()
 		{
 			var service = _comObjects.VirtualDesktopNotificationService;
 			listener = new VirtualDesktopNotificationListener(this);
