@@ -17,80 +17,38 @@ namespace WindowsDesktop
 		/// <summary>
 		/// Gets the unique identifier for the virtual desktop.
 		/// </summary>
-		public Guid Id { get; }
+		public Guid Id { get { return ComObject.GetID(); } }
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public IVirtualDesktop ComObject => ComObjects.GetVirtualDesktop(this.Id);
+		public IVirtualDesktop ComObject { get; }
 
-		private VirtualDesktop(IVirtualDesktop comObject)
+        private readonly VirtualDesktops _desktops;
+
+		internal VirtualDesktop(VirtualDesktops desktops, IVirtualDesktop comObject)
 		{
-			ComObjects.Register(comObject);
-			this.Id = comObject.GetID();
+            _desktops = desktops;
+            this.ComObject = comObject;
 		}
 
 
-		/// <summary>
-		/// Display the virtual desktop.
-		/// </summary>
-		public void Switch()
-		{
-			ComObjects.VirtualDesktopManagerInternal.SwitchDesktop(this.ComObject);
-		}
+        /// <summary>
+        /// Display the virtual desktop.
+        /// </summary>
+        public void Switch() => _desktops.Switch(this);
 
-		/// <summary>
-		/// Remove the virtual desktop.
-		/// </summary>
-		public void Remove()
-		{
-			this.Remove(GetDesktopsInternal().FirstOrDefault(x => x.Id != this.Id) ?? Create());
-		}
+        /// <summary>
+        /// Remove the virtual desktop, specifying a virtual desktop that display after destroyed.
+        /// </summary>
+        public void Remove(VirtualDesktop fallbackDesktop = null) => _desktops.Remove(this, fallbackDesktop);
 
-		/// <summary>
-		/// Remove the virtual desktop, specifying a virtual desktop that display after destroyed.
-		/// </summary>
-		public void Remove(VirtualDesktop fallbackDesktop)
-		{
-			if (fallbackDesktop == null) throw new ArgumentNullException(nameof(fallbackDesktop));
-
-			ComObjects.VirtualDesktopManagerInternal.RemoveDesktop(this.ComObject, fallbackDesktop.ComObject);
-		}
-
-		/// <summary>
-		/// Returns a virtual desktop on the left.
-		/// </summary>
-		public VirtualDesktop GetLeft()
-		{
-			IVirtualDesktop desktop;
-			try
-			{
-				desktop = ComObjects.VirtualDesktopManagerInternal.GetAdjacentDesktop(this.ComObject, AdjacentDesktop.LeftDirection);
-			}
-			catch (COMException ex) when (ex.Match(HResult.TYPE_E_OUTOFBOUNDS))
-			{
-				return null;
-			}
-			var wrapper = _wrappers.GetOrAdd(desktop.GetID(), _ => new VirtualDesktop(desktop));
-
-			return wrapper;
-		}
+        /// <summary>
+        /// Returns a virtual desktop on the left.
+        /// </summary>
+        public VirtualDesktop GetLeft() => _desktops.GetLeft(this);
 
 		/// <summary>
 		/// Returns a virtual desktop on the right.
 		/// </summary>
-		public VirtualDesktop GetRight()
-		{
-			IVirtualDesktop desktop;
-			try
-			{
-				desktop = ComObjects.VirtualDesktopManagerInternal.GetAdjacentDesktop(this.ComObject, AdjacentDesktop.RightDirection);
-			}
-			catch (COMException ex) when (ex.Match(HResult.TYPE_E_OUTOFBOUNDS))
-			{
-				return null;
-			}
-			var wrapper = _wrappers.GetOrAdd(desktop.GetID(), _ => new VirtualDesktop(desktop));
-
-			return wrapper;
-		}
-	}
+		public VirtualDesktop GetRight() => _desktops.GetRight(this);
+    }
 }
