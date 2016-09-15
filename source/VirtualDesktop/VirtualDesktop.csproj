@@ -101,6 +101,7 @@
     <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="Interop\VirtualDesktopManagerInternal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualDesktops.list.cs" />
     <Compile Include="VirtualDesktops.pin.cs" />
     <Compile Include="VirtualDesktops.cs" />
     <Compile Include="VirtualDesktop.cs" />

@@ -55,24 +55,6 @@ namespace WindowsDesktop
             _comObjects.Dispose();
         }
 
-        /// <summary>
-        /// Returns all the virtual desktops of currently valid.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<VirtualDesktop> GetDesktops()
-		{
-			var desktops = _comObjects.VirtualDesktopManagerInternal.GetDesktops();
-			var count = desktops.GetCount();
-
-			for (var i = 0u; i < count; i++)
-			{
-				object ppvObject;
-				desktops.GetAt(i, typeof(IVirtualDesktop).GUID, out ppvObject);
-
-				yield return wrap((IVirtualDesktop)ppvObject);
-			}
-		}
-
 		/// <summary>
 		/// Creates a virtual desktop.
 		/// </summary>
@@ -126,7 +108,7 @@ namespace WindowsDesktop
         {
             if (fallbackDesktop == null)
             {
-                fallbackDesktop = GetDesktops().FirstOrDefault(x => x.Id != desktop.Id) ?? Create();
+                fallbackDesktop = this.FirstOrDefault(x => x.Id != desktop.Id) ?? Create();
             }
 
             _comObjects.VirtualDesktopManagerInternal.RemoveDesktop(desktop.ComObject, fallbackDesktop.ComObject);
