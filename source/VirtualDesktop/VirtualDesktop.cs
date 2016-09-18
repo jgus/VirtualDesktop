@@ -11,11 +11,6 @@ namespace WindowsDesktop
     [DebuggerDisplay("{Id}")]
 	public partial class VirtualDesktop
 	{
-		/// <summary>
-		/// Gets the unique identifier for the virtual desktop.
-		/// </summary>
-		public Guid Id { get { return ComObject.GetID(); } }
-
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public IVirtualDesktop ComObject { get; }
 
@@ -27,6 +22,14 @@ namespace WindowsDesktop
             this.ComObject = comObject;
 		}
 
+        public bool Equals(VirtualDesktop other) => ((other != null) && other.Id.Equals(Id));
+
+        public override bool Equals(object obj) => Equals(obj as VirtualDesktop);
+
+        /// <summary>
+        /// Gets the unique identifier for the virtual desktop.
+        /// </summary>
+        public Guid Id { get { return ComObject.GetID(); } }
 
         /// <summary>
         /// Display the virtual desktop.
